@@ -1,28 +1,35 @@
-# SourceMap Upload Script
+# SourceMap Upload Scripts
 
-This document explains how to use either `upload-sourcemap.sh` or `upload_sourcemap.py` to upload an existing `sourcemap.zip` through OpenAPI.
+This repository provides two scripts for uploading an existing `sourcemap.zip` through OpenAPI:
 
-## Prerequisites
+- `upload-sourcemap.sh`
+- `upload_sourcemap.py`
 
-- A valid `DF-API-KEY`
-- A prepared `sourcemap.zip`
-- For the shell version:
+The scripts upload an already prepared zip file only. They do not generate or package sourcemaps.
+
+For product background, SourceMap packaging requirements, parameter source instructions, and troubleshooting details, refer to the official documentation:
+
+- https://docs.guance.com/real-user-monitoring/sourcemap/script-upload-sourcemap
+
+## Requirements
+
+- Shell script:
   - `bash`
   - `curl`
   - `jq`
   - `split`
   - `mktemp`
   - `wc`
-- For the Python version:
+- Python script:
   - `python3`
 
 ## Quick Start
 
-Shell version:
+Shell:
 
 ```bash
 sh ./upload-sourcemap.sh \
-  --endpoint https://openapi.guance.com \
+  --endpoint https://your-openapi-endpoint \
   --api-key "$DF_API_KEY" \
   --app-id app_id_from_studio \
   --version 1.0.2 \
@@ -31,11 +38,11 @@ sh ./upload-sourcemap.sh \
   --need-cover true
 ```
 
-Python version:
+Python:
 
 ```bash
 python3 ./upload_sourcemap.py \
-  --endpoint https://openapi.guance.com \
+  --endpoint https://your-openapi-endpoint \
   --api-key "$DF_API_KEY" \
   --app-id app_id_from_studio \
   --version 1.0.2 \
@@ -66,15 +73,13 @@ Optional:
 - `--env`: deployment environment, for example `daily`, `gray`, or `prod`
 - `--need-cover`: `true` or `false`, default is `false`
 - `--chunk-size-mb`: multipart chunk size in MB, default is `10`, max is `10`
-- `--merge-path`: custom merge endpoint if your deployment uses a different path
-- `--cancel-path`: custom cancel endpoint if your deployment uses a different path
+- `--merge-path`: custom merge endpoint path
+- `--cancel-path`: custom cancel endpoint path
 
 ## Environment Variables
 
-You can provide the same values through environment variables:
-
 ```bash
-export DF_OPENAPI_ENDPOINT="https://openapi.guance.com"
+export DF_OPENAPI_ENDPOINT="https://your-openapi-endpoint"
 export DF_API_KEY="your-api-key"
 export DF_APP_ID="app_id_from_studio"
 export DF_VERSION="1.0.2"
@@ -94,24 +99,3 @@ Or:
 ```bash
 python3 ./upload_sourcemap.py
 ```
-
-## Notes
-
-- Both scripts upload an existing zip file only. They do not build or package sourcemaps.
-- The zip file must already follow the required sourcemap packaging format.
-- Both scripts use `DF-API-KEY` authentication only.
-- Both scripts attempt to cancel the multipart upload automatically if the flow fails after init.
-- The Python version uses only the Python standard library and does not require extra pip packages.
-
-## Common Errors
-
-- `uploadId is empty`
-  - Usually means the same sourcemap already exists and overwrite is disabled.
-  - Retry with `--need-cover true` if overwrite is intended.
-
-- `Missing required command`
-  - Install the missing shell tool and rerun the script.
-
-- `Merge endpoint ... returned HTTP 404`
-  - Your private deployment may use a custom merge path.
-  - Retry with `--merge-path <your-path>`.
