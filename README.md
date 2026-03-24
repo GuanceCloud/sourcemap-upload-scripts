@@ -24,7 +24,7 @@ Shell version:
 sh ./upload-sourcemap.sh \
   --endpoint https://openapi.guance.com \
   --api-key "$DF_API_KEY" \
-  --app-id gc_app_android_demo \
+  --app-id app_id_from_studio \
   --version 1.0.2 \
   --env daily \
   --file ./sourcemap.zip \
@@ -37,7 +37,7 @@ Python version:
 python3 ./upload_sourcemap.py \
   --endpoint https://openapi.guance.com \
   --api-key "$DF_API_KEY" \
-  --app-id gc_app_android_demo \
+  --app-id app_id_from_studio \
   --version 1.0.2 \
   --env daily \
   --file ./sourcemap.zip \
